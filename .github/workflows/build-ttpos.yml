@@ -66,7 +66,7 @@ jobs:
       - name: Build the MINI
         working-directory: ./app/Mini
         run: |
-          node install fs-extra
+          npm install fs-extra
           pnpm install
           npm run build:web-app
       - name: Build the Webapp
