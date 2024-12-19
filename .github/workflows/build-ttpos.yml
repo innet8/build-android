@@ -67,11 +67,11 @@ jobs:
         working-directory: ./app/Mini
         run: |
           npm install fs-extra
-          pnpm install --no-frozen-lockfile
+          pnpm install 
           npm run build:web-app
       - name: Build the Webapp
         run: |
-          pnpm install --no-frozen-lockfile
+          pnpm install 
           npm run build:web-app
       - name: Build the APK
         working-directory: ./app/JBC
