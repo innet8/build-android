@@ -35,8 +35,8 @@ jobs:
             new_version="${{ github.event.inputs.version }}"
           fi
           new_version_code=$(date +%y%m%d%H)
-          jq '.version = $new_version | .versionCode = $new_version_code' package.json > tmp.json && mv tmp.json package.json
-          cat > /home/cash-register-system/src/static/config.js  <<EOF
+          jq '.version = "'${new_version}'" | .versionCode = '${new_version_code}'' package.json > tmp.json && mv tmp.json package.json
+          cat > src/static/config.js  <<EOF
           window.config = () => {
               return {
                   title: 'TTPOS', // 默认浏览器标题 JBCレジ TTPOS
