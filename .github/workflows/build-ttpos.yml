@@ -58,11 +58,12 @@ jobs:
           version=${{ steps.config.outputs.new_version }}
           version_code=${{ steps.config.outputs.new_version_code }}
           ./gradlew assemble "-PCustomCode=${version_code}" "-PVersionName=${version}" "-PPackageTimes=1" 
-          
+          echo $(pwd)
+          ls app/build/outputs/apk/ttpos/release/
       - name: Save Build Result
         uses: actions/upload-artifact@v4
         with:
           name: apk
           path: |
-            app/build/outputs/apk/jbc/release/*.apk
-            app/build/outputs/apk/ttpos/release/*.apk
+            app/JBC/app/build/outputs/apk/jbc/release/*.apk
+            app/JBC/app/build/outputs/apk/ttpos/release/*.apk
