@@ -63,4 +63,6 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: apk
-          path: app/JBC/app/build/outputs/apk/release/*.apk
+          path: |
+            apks/*.apk
+            app/JBC/apks/*.apk
