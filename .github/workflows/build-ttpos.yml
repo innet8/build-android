@@ -57,12 +57,10 @@ jobs:
           chmod +x gradlew
           version=${{ steps.config.outputs.new_version }}
           version_code=${{ steps.config.outputs.new_version_code }}
-          echo "-PCustomCode=${versionCode}" "-PVersionName=${version}"
           ./gradlew assemble "-PCustomCode=${version_code}" "-PVersionName=${version}" "-PPackageTimes=1" 
           
       - name: Save Build Result
         uses: actions/upload-artifact@v4
         with:
           name: apk
-          path: |
-            *.apk
+          path: app/build/outputs/apk/release/*.apk
