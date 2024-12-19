@@ -64,5 +64,5 @@ jobs:
         with:
           name: apk
           path: |
-            apks/*.apk
-            app/JBC/apks/*.apk
+            app/build/outputs/apk/jbc/release/*.apk
+            app/build/outputs/apk/ttpos/release/*.apk
