@@ -62,11 +62,11 @@ jobs:
           EOF
           echo "new_version=$new_version" >> $GITHUB_OUTPUT
           echo "new_version_code=$new_version_code" >> $GITHUB_OUTPUT
-          node install fs-extra
-
+          
       - name: Build the MINI
         working-directory: ./app/Mini
         run: |
+          node install fs-extra
           pnpm install
           npm run build:web-app
       - name: Build the Webapp
