@@ -55,8 +55,8 @@ jobs:
         working-directory: ./app/JBC
         run: |
           chmod +x gradlew
-          version=${{ steps.config.outputs.new_version }}" 
-          version_code "${{ steps.config.outputs.new_version_code }}"
+          version=${{ steps.config.outputs.new_version }}
+          version_code=${{ steps.config.outputs.new_version_code }}
           ./gradlew assemble "-PCustomCode=$versionCode" "-PVersionName=$version" 
           
       - name: Save Build Result
