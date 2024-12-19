@@ -1,0 +1,65 @@
+name: Build TTPOS APK
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version name (e.g., 1.0.0)'
+        required: true
+        default: '1.0.0'
+  push:
+    tags:
+      - 'v*'
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the code
+        uses: actions/checkout@v2
+        with:
+          submodules: 'true'
+          
+      - name: Set up JDK
+        uses: actions/setup-java@v1
+        with:
+          java-version: 1.8
+          
+      - name: version configuration
+        run: |
+          if [[ "${{ github.event_name }}" == "push" ]]; then
+            tag=${{ github.ref }}
+            new_version=$(echo ${tag} | sed 's/refs\/tags\/v//')
+          else
+            new_version="${{ github.event.inputs.version }}"
+          fi
+          new_version_code=$(date +%y%m%d%H)
+          jq '.version = $new_version | .versionCode = $new_version_code' package.json > tmp.json && mv tmp.json package.json
+          cat > /home/cash-register-system/src/static/config.js  <<EOF
+          window.config = () => {
+              return {
+                  title: 'TTPOS', // 默认浏览器标题 JBCレジ TTPOS
+                  brand: 'ttpos', // 品牌 日本=> jbc, 泰国=>ttpos
+                  webLogo: '', // webLogo有值是优先加载Logo 否则按照地区加载默认图标
+                  mode: 'saas', // 部署模式 saas=云端部署 or local=局域网部署
+                  saasApiUrl: 'cashier.ttpos.com'
+              };
+          };
+          EOF
+          echo "::set-output name=new_version::$new_version"
+          echo "::set-output name=new_version_code::$new_version_code"
+          
+      - name: Build the APK
+        working-directory: ./app/JBC
+        run: |
+          if [ ! -f "gradlew" ]; then gradle wrapper; fi
+          chmod +x gradlew
+          version=${{ steps.determine_version.outputs.new_version }}" 
+          version_code "${{ steps.determine_version.outputs.new_version_code }}"
+          ./gradlew assemble "-PCustomCode=$versionCode" "-PVersionName=$version" 
+          
+      - name: Save Build Result
+        uses: actions/upload-artifact@v2
+        with:
+          name: apk
+          path: |
+            *.apk
