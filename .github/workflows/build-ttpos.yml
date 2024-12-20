@@ -20,7 +20,7 @@ jobs:
           submodules: 'true'
           repository: 'innet8/cash-register-system' # 目标仓库的 owner 和名称
           token: ${{ secrets.OTHER_REPO_TOKEN }} # 使用存储在 secrets 中的 token
-          ref: 'release' # 可选：指定要检出的分支或 tag，默认为 default branch
+          ref: '1.1.0' # 可选：指定要检出的分支或 tag，默认为 default branch
       - name: Set up JDK
         uses: actions/setup-java@v1
         with:
