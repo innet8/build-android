@@ -1,5 +1,16 @@
 name: Build TTPOS APK
 
+env:
+  branch: 1.1.0
+  repository: innet8/cash-register-system
+  title: TTPOS
+  brand: ttpos
+  webLogo: ''
+  mode: saas
+  saasApiUrl: https://cashier.ttpos.com
+  apk_path: app/JBC/app/build/outputs/apk/ttpos/release/
+  upload_path: dc_apk/TTPOS/Prod/Cashier/
+  
 on:
   workflow_dispatch:
     inputs:
@@ -7,6 +18,10 @@ on:
         description: 'Version name (e.g., 1.0.0)'
         required: true
         default: '1.0.0'
+      branch: 
+        description: 'branch (e.g., release)'
+        required: true
+        default: 'release'
   push:
     tags:
       - 'v*'
@@ -18,9 +33,9 @@ jobs:
         uses: actions/checkout@v3
         with:
           submodules: 'true'
-          repository: 'innet8/cash-register-system' # 目标仓库的 owner 和名称
+          repository: ${{ env.repository }} # 目标仓库的 owner 和名称
           token: ${{ secrets.OTHER_REPO_TOKEN }} # 使用存储在 secrets 中的 token
-          ref: '1.1.0' # 可选：指定要检出的分支或 tag，默认为 default branch
+          ref: ${{ github.event.inputs.branch }} # 可选：指定要检出的分支或 tag，默认为 default branch
       - name: Set up JDK
         uses: actions/setup-java@v1
         with:
@@ -52,11 +67,11 @@ jobs:
           cat > src/static/config.js  <<EOF
           window.config = () => {
               return {
-                  title: 'TTPOS', // 默认浏览器标题 JBCレジ TTPOS
-                  brand: 'ttpos', // 品牌 日本=> jbc, 泰国=>ttpos
-                  webLogo: '', // webLogo有值是优先加载Logo 否则按照地区加载默认图标
-                  mode: 'saas', // 部署模式 saas=云端部署 or local=局域网部署
-                  saasApiUrl: 'https://cashier.ttpos.com'
+                  title: ${{ env.title }}, // 默认浏览器标题 JBCレジ TTPOS
+                  brand: ${{ env.brand }}, // 品牌 日本=> jbc, 泰国=>ttpos
+                  webLogo: ${{ env.webLogo }}, // webLogo有值是优先加载Logo 否则按照地区加载默认图标
+                  mode: ${{ env.mode }}, // 部署模式 saas=云端部署 or local=局域网部署
+                  saasApiUrl: ${{ env.saasApiUrl }}
               };
           };
           EOF
@@ -84,6 +99,16 @@ jobs:
           version_code=${{ steps.config.outputs.new_version_code }}
           ./gradlew assemble "-PCustomCode=${version_code}" "-PVersionName=${version}" "-PPackageTimes=1" 
           #./autoBuild.sh full
+      - uses: 'google-github-actions/auth@v2'
+        with:
+          credentials_json: '${{ secrets.GOOGLE_CREDENTIALS }}'  
+
+      - id: 'upload-files'
+        uses: 'google-github-actions/upload-cloud-storage@v2'
+        with:
+          path: ${{ env.apk_path }}
+          destination: ${{ env.upload_path }}      
+          parent: false
           
       - name: Save Build Result
         uses: actions/upload-artifact@v4
