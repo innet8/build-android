@@ -7,7 +7,7 @@ env:
   brand: ttpos
   webLogo: ''
   mode: saas
-  saasApiUrl: https://cashier.ttpos.com
+  saasApiUrl: 'https://cashier.ttpos.com'
   apk_path: app/JBC/app/build/outputs/apk/ttpos/release/
   upload_path: dc_apk/TTPOS/Prod/Cashier/
   
@@ -67,11 +67,11 @@ jobs:
           cat > src/static/config.js  <<EOF
           window.config = () => {
               return {
-                  title: ${{ env.title }}, // 默认浏览器标题 JBCレジ TTPOS
-                  brand: ${{ env.brand }}, // 品牌 日本=> jbc, 泰国=>ttpos
-                  webLogo: ${{ env.webLogo }}, // webLogo有值是优先加载Logo 否则按照地区加载默认图标
-                  mode: ${{ env.mode }}, // 部署模式 saas=云端部署 or local=局域网部署
-                  saasApiUrl: ${{ env.saasApiUrl }}
+                  title: '${{ env.title }}', // 默认浏览器标题 JBCレジ TTPOS
+                  brand: '${{ env.brand }}', // 品牌 日本=> jbc, 泰国=>ttpos
+                  webLogo: '${{ env.webLogo }}', // webLogo有值是优先加载Logo 否则按照地区加载默认图标
+                  mode: '${{ env.mode }}', // 部署模式 saas=云端部署 or local=局域网部署
+                  saasApiUrl: '${{ env.saasApiUrl }}'
               };
           };
           EOF
