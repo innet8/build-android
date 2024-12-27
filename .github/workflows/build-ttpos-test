@@ -1,4 +1,4 @@
-name: Build TTPOS APK
+name: Build TTPOS Test APK
 
 env:
   repository: innet8/cash-register-system
