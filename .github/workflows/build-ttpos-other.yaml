@@ -99,9 +99,13 @@ jobs:
         run: |
           npm install --legacy-peer-deps
           npm run build:h5
+
+      - name: Copy dist to android
+        working-directory: ${{ matrix.repository }}
+        run: |
           mkdir -p ${{ env[format('{0}_pack', matrix.repository)] }}/app/src/main/assets/hybrid
-          ls dist/build/h5/
-          cp -r dist/build/h5/* ${{ env[format('{0}_pack', matrix.repository)] }}/app/src/main/assets/hybrid/
+          ls ${{ matrix.repository }}/dist/build/h5/
+          cp -r ${{ matrix.repository }}/dist/build/h5/* ${{ env[format('{0}_pack', matrix.repository)] }}/app/src/main/assets/hybrid/
           
       - name: Build the APK
         working-directory: ${{ env[format('{0}_pack', matrix.repository)] }}
