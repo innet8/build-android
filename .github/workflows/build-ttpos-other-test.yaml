@@ -47,7 +47,7 @@ jobs:
           repository: innet8/${{ env[format('{0}_pack', matrix.repository)] }}
           path: ${{ env[format('{0}_pack', matrix.repository)] }}
           token: ${{ secrets.OTHER_REPO_TOKEN }}
-          ref: ${{ github.event.inputs.branch }} 
+          ref: tiger 
 
       - name: Set up JDK
         uses: actions/setup-java@v1
