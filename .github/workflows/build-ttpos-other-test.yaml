@@ -124,11 +124,11 @@ jobs:
           parent: false
           
             
-      # - name: Save Build Result
-      #   uses: actions/upload-artifact@v4
-      #   with:
-      #     name: apk
-      #     path: |
-      #       ${{ env[format('{0}_pack', matrix.repository)] }}/app/build/outputs/apk/ttpos/release/*.apk
+      - name: Save Build Result
+        uses: actions/upload-artifact@v4
+        with:
+          name: apk
+          path: |
+            ${{ env[format('{0}_pack', matrix.repository)] }}/app/build/outputs/apk/ttpos/release/*.apk
           
   
