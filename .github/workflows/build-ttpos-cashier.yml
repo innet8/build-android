@@ -1,4 +1,4 @@
-name: Build TTPOS Test APK
+name: Build TTPOS Cashier APK
 
 env:
   repository: innet8/cash-register-system
@@ -6,9 +6,9 @@ env:
   brand: ttpos
   webLogo: ''
   mode: saas
-  saasApiUrl: 'https://jjjshop.keli.vip'
+  saasApiUrl: 'https://cashier.ttpos.com'
   apk_path: app/JBC/app/build/outputs/apk/ttpos/release/
-  upload_path: dc_apk/TTPOS/Test/Cashier/
+  upload_path: dc_apk/TTPOS/Prod/Cashier/
   
 on:
   workflow_dispatch:
@@ -21,7 +21,9 @@ on:
         description: 'branch (e.g., release)'
         required: true
         default: 'release'
-
+  push:
+    tags:
+      - 'v*'
 jobs:
   build:
     runs-on: ubuntu-22.04
@@ -32,7 +34,7 @@ jobs:
           submodules: 'true'
           repository: ${{ env.repository }} # 目标仓库的 owner 和名称
           token: ${{ secrets.OTHER_REPO_TOKEN }} # 使用存储在 secrets 中的 token
-          ref: ${{ github.event.inputs.branch }} # 可选：指定要检出的分支或 tag，默认为 default branch
+          ref: ${{ github.event_name == 'push' && github.ref_name || github.event.inputs.branch }}
       - name: Set up JDK
         uses: actions/setup-java@v1
         with:
