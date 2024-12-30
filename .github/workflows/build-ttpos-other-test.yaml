@@ -42,7 +42,7 @@ jobs:
         env:
           flat-panel-side_pack: "WebViewPack"
           KitchenDisplay_pack: "KitchenPack"
-          Cashier-System-Helper_pack: "CashierHelper"
+          Cashier-System-Helper_pack: "CashierHelperPack"
         with:
           repository: innet8/${{ env[format('{0}_pack', matrix.repository)] }}
           path: ${{ env[format('{0}_pack', matrix.repository)] }}
@@ -61,10 +61,12 @@ jobs:
           run_install: false
 
       - name: Install Node.js
+        
         uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: 'pnpm'
+          cache-dependency-path: ${{ matrix.repository }}/pnpm-lock.yaml
           
       - name: version configuration
         working-directory: ${{ matrix.repository }}
