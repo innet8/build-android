@@ -101,7 +101,6 @@ jobs:
           npm run build:h5
 
       - name: Copy dist to android
-        working-directory: ${{ matrix.repository }}
         run: |
           mkdir -p ${{ env[format('{0}_pack', matrix.repository)] }}/app/src/main/assets/hybrid
           ls ${{ matrix.repository }}/dist/build/h5/
