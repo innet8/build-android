@@ -2,6 +2,9 @@ name: Build TTPOS Other Test APK
 
 env:
   # repositories: innet8/flat-panel-side,innet8/KitchenDisplay,innet8/Cashier-System-Helper
+  flat-panel-side_pack: "WebViewPack"
+  KitchenDisplay_pack: "KitchenPack"
+  Cashier-System-Helper_pack: "CashierHelperPack" 
   title: TTPOS
   brand: ttpos
   webLogo: ''
@@ -39,10 +42,6 @@ jobs:
           ref: ${{ github.event.inputs.branch }} 
       - name: Checkout pack code
         uses: actions/checkout@v3
-        env:
-          flat-panel-side_pack: "WebViewPack"
-          KitchenDisplay_pack: "KitchenPack"
-          Cashier-System-Helper_pack: "CashierHelperPack"
         with:
           repository: innet8/${{ env[format('{0}_pack', matrix.repository)] }}
           path: ${{ env[format('{0}_pack', matrix.repository)] }}
@@ -99,6 +98,7 @@ jobs:
         run: |
           npm install --legacy-peer-deps
           npm run build:h5
+          mkdir -p ${{ env[format('{0}_pack', matrix.repository)] }}/app/src/main/assets/hybrid
           cp -r dist/build/h5 ${{ env[format('{0}_pack', matrix.repository)] }}/app/src/main/assets/hybrid
           
       - name: Build the APK
@@ -117,7 +117,6 @@ jobs:
 
       - id: 'upload-files'
         uses: 'google-github-actions/upload-cloud-storage@v2'
-        
         with:
           path: ${{ env[format('{0}_pack', matrix.repository)] }}/${{ env.apk_path }}
           destination: ${{ env.upload_path }}      
