@@ -127,7 +127,7 @@ jobs:
       - name: Save Build Result
         uses: actions/upload-artifact@v4
         with:
-          name: apk
+          name: ${{ env[format('{0}_pack', matrix.repository)] }}
           path: |
             ${{ env[format('{0}_pack', matrix.repository)] }}/app/build/outputs/apk/ttpos/release/*.apk
           
