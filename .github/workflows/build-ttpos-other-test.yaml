@@ -65,8 +65,8 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: 'pnpm'
-          cache-dependency-path: ${{ matrix.repository }}/pnpm-lock.yaml
+          # cache: 'pnpm'
+          # cache-dependency-path: ${{ matrix.repository }}/pnpm-lock.yaml
           
       - name: version configuration
         working-directory: ${{ matrix.repository }}
