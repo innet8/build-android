@@ -97,11 +97,13 @@ jobs:
       - name: Build the web
         working-directory: ${{ matrix.repository }}
         run: |
+          rm -rf dist/build/h5/
           npm install --legacy-peer-deps
           npm run build:h5
 
       - name: Copy dist to android
         run: |
+          rm -rf ${{ env[format('{0}_pack', matrix.repository)] }}/app/src/main/assets/hybrid
           mkdir -p ${{ env[format('{0}_pack', matrix.repository)] }}/app/src/main/assets/hybrid
           ls ${{ matrix.repository }}/dist/build/h5/
           cp -r ${{ matrix.repository }}/dist/build/h5/* ${{ env[format('{0}_pack', matrix.repository)] }}/app/src/main/assets/hybrid/
