@@ -100,7 +100,8 @@ jobs:
           npm install --legacy-peer-deps
           npm run build:h5
           mkdir -p ${{ env[format('{0}_pack', matrix.repository)] }}/app/src/main/assets/hybrid
-          cp -r dist/build/h5 ${{ env[format('{0}_pack', matrix.repository)] }}/app/src/main/assets/hybrid
+          ls dist/build/h5/
+          cp -r dist/build/h5/* ${{ env[format('{0}_pack', matrix.repository)] }}/app/src/main/assets/hybrid/
           
       - name: Build the APK
         working-directory: ${{ env[format('{0}_pack', matrix.repository)] }}
