@@ -11,19 +11,9 @@ env:
   upload_path: dc_apk/TTPOS/Prod/Cashier/
   
 on:
-  workflow_dispatch:
-    inputs:
-      version:
-        description: 'Version name (e.g., 1.0.0)'
-        required: true
-        default: '1.0.0'
-      branch: 
-        description: 'branch (e.g., release)'
-        required: true
-        default: 'release'
   push:
     tags:
-      - 'v*'
+      - '*'
 jobs:
   build:
     runs-on: ubuntu-22.04
