@@ -107,8 +107,8 @@ jobs:
           chmod +x gradlew
           version=${{ steps.config.outputs.new_version }}
           version_code=${{ steps.config.outputs.new_version_code }}
-          sed -i '' "s/versionName \"[^\"]*\"/versionName \"$version\"/" app/build.gradle
-          sed -i '' "s/versionCode [0-9]*/versionCode $version_code/" app/build.gradle
+          sed -i "s/versionName \"[^\"]*\"/versionName \"$version\"/" app/build.gradle
+          sed -i "s/versionCode [0-9]*/versionCode $version_code/" app/build.gradle
           ./gradlew assembleTtposRelease  
 
       - uses: 'google-github-actions/auth@v2'
