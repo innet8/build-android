@@ -1,4 +1,4 @@
-name: Build TTPOS Cashier-System-Helper Test APK
+name: Build TTPOS kitchendisplay Test APK
 
 env:
   # repositories: innet8/flat-panel-side,innet8/KitchenDisplay,innet8/Cashier-System-Helper
