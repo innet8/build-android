@@ -84,8 +84,8 @@ jobs:
           
       - name: Build the Webapp
         run: |
-          pnpm install --no-frozen-lockfile
           ls -lh
+          #pnpm install --no-frozen-lockfile
           # npm run build:web-app
           # ls dist/build/h5/assets
           # ls app/JBC/app/src/main/assets/hybrid/assets
