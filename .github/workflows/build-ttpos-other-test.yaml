@@ -12,9 +12,9 @@ env:
   saasApiUrl: 'http://192.168.8.202'
   apk_path: app/build/outputs/apk/ttpos/release/
   # upload_path: dc_apk/TTPOS/Test/Cashier/
-  flat-panel-side_path: dc_apk/TTPOS/Test/Menu/
-  KitchenDisplay_path: dc_apk/TTPOS/Test/Kitchen/
-  Cashier-System-Helper_path: dc_apk/TTPOS/Test/Assistant/
+  flat-panel-side_path: dc_apk/TTPOS/JP/Menu/
+  KitchenDisplay_path: dc_apk/TTPOS/JP/Kitchen/
+  Cashier-System-Helper_path: dc_apk/TTPOS/JP/Assistant/
 on:
   workflow_dispatch:
     inputs:
