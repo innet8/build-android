@@ -6,7 +6,7 @@ env:
   KitchenDisplay_pack: KitchenPack
   Cashier-System-Helper_pack: CashierHelperPack
   title: TTPOS
-  brand: release
+  brand: ttpos
   webLogo: ''
   mode: saas
   saasApiUrl: 'http://192.168.8.202'

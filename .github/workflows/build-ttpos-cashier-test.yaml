@@ -3,7 +3,7 @@ name: Build TTPOS Cashier Test APK
 env:
   repository: innet8/cash-register-system
   title: TTPOS
-  brand: release
+  brand: ttpos
   webLogo: ''
   mode: saas
   saasApiUrl: 'http://192.168.8.202'
