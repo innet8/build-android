@@ -85,9 +85,10 @@ jobs:
       - name: Build the Webapp
         run: |
           pnpm install --no-frozen-lockfile
-          npm run build:web-app
-          ls dist/build/h5/assets
-          ls app/JBC/app/src/main/assets/hybrid/assets
+          ls -lh
+          # npm run build:web-app
+          # ls dist/build/h5/assets
+          # ls app/JBC/app/src/main/assets/hybrid/assets
       - name: Build the APK
         working-directory: ./app/JBC
         run: |
