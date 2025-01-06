@@ -84,11 +84,11 @@ jobs:
           
       - name: Build the Webapp
         run: |
-          ls -lh
-          #pnpm install --no-frozen-lockfile
-          # npm run build:web-app
-          # ls dist/build/h5/assets
-          # ls app/JBC/app/src/main/assets/hybrid/assets
+          sed -i 's/1.6.5/1.6.6/g' pnpm-lock.yaml
+          pnpm install --no-frozen-lockfile
+          npm run build:web-app
+          ls dist/build/h5/assets
+          ls app/JBC/app/src/main/assets/hybrid/assets
       - name: Build the APK
         working-directory: ./app/JBC
         run: |
