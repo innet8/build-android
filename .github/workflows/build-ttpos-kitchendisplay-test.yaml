@@ -6,10 +6,10 @@ env:
   KitchenDisplay_pack: KitchenPack
   Cashier-System-Helper_pack: CashierHelperPack
   title: TTPOS
-  brand: ttpos
+  brand: release
   webLogo: ''
   mode: saas
-  saasApiUrl: 'https://jjjshop.keli.vip'
+  saasApiUrl: 'http://192.168.8.202'
   apk_path: app/build/outputs/apk/ttpos/release/
   # upload_path: dc_apk/TTPOS/Test/Cashier/
   flat-panel-side_path: dc_apk/TTPOS/Test/Menu/
