@@ -8,7 +8,7 @@ env:
   mode: saas
   saasApiUrl: 'http://192.168.8.202'
   apk_path: app/JBC/app/build/outputs/apk/ttpos/release/
-  upload_path: dc_apk/TTPOS/Test/Cashier/
+  upload_path: dc_apk/TTPOS/JP/Cashier/
   
 on:
   workflow_dispatch:
