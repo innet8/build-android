@@ -1,20 +1,15 @@
-name: Build TTPOS flat-panel-side Test APK
+name: Build TTPOS Cashier Test APK
 
 env:
-  # repositories: innet8/flat-panel-side,innet8/KitchenDisplay,innet8/Cashier-System-Helper
-  flat-panel-side_pack: WebViewPack
-  KitchenDisplay_pack: KitchenPack
-  Cashier-System-Helper_pack: CashierHelperPack
+  repository: innet8/cash-register-system
   title: TTPOS
   brand: ttpos
   webLogo: ''
   mode: saas
-  saasApiUrl: 'http://192.168.8.202'
-  apk_path: app/build/outputs/apk/ttpos/release/
-  # upload_path: dc_apk/TTPOS/Test/Cashier/
-  flat-panel-side_path: dc_apk/TTPOS/Test/Menu/
-  KitchenDisplay_path: dc_apk/TTPOS/Test/Kitchen/
-  Cashier-System-Helper_path: dc_apk/TTPOS/Test/Assistant/
+  saasApiUrl: 'https://d-group.ttpos.com'
+  apk_path: app/JBC/app/build/outputs/apk/ttpos/release/
+  upload_path: dc_apk/TTPOS/Demo/Cashier/
+  
 on:
   workflow_dispatch:
     inputs:
@@ -30,26 +25,14 @@ on:
 jobs:
   build:
     runs-on: ubuntu-22.04
-    strategy:
-      fail-fast: false
-      matrix:
-        repository: [ flat-panel-side ]
     steps:
       - name: Checkout the code
         uses: actions/checkout@v3
         with:
-          path: ${{ matrix.repository }}
-          repository: innet8/${{ matrix.repository }}
-          token: ${{ secrets.OTHER_REPO_TOKEN }}
-          ref: ${{ github.event.inputs.branch }} 
-      - name: Checkout pack code
-        uses: actions/checkout@v3
-        with:
-          repository: innet8/${{ env[format('{0}_pack', matrix.repository)] }}
-          path: ${{ env[format('{0}_pack', matrix.repository)] }}
-          token: ${{ secrets.OTHER_REPO_TOKEN }}
-          ref: tiger 
-
+          submodules: 'true'
+          repository: ${{ env.repository }} # 目标仓库的 owner 和名称
+          token: ${{ secrets.OTHER_REPO_TOKEN }} # 使用存储在 secrets 中的 token
+          ref: ${{ github.event.inputs.branch }} # 可选：指定要检出的分支或 tag，默认为 default branch
       - name: Set up JDK
         uses: actions/setup-java@v1
         with:
@@ -65,11 +48,9 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          # cache: 'pnpm'
-          # cache-dependency-path: ${{ matrix.repository }}/pnpm-lock.yaml
+          cache: 'pnpm'
           
       - name: version configuration
-        working-directory: ${{ matrix.repository }}
         id: config
         run: |
           if [[ "${{ github.event_name }}" == "push" ]]; then
@@ -93,31 +74,29 @@ jobs:
           EOF
           echo "new_version=$new_version" >> $GITHUB_OUTPUT
           echo "new_version_code=$new_version_code" >> $GITHUB_OUTPUT
-        
-      - name: Build the web
-        working-directory: ${{ matrix.repository }}
+          
+      - name: Build the MINI
+        working-directory: ./app/Mini
         run: |
-          rm -rf dist/build/h5/
-          npm install --legacy-peer-deps
-          npm run build:h5
-
-      - name: Copy dist to android
+          pnpm install fs-extra
+          pnpm install --no-frozen-lockfile
+          npm run build:web-app
+          
+      - name: Build the Webapp
         run: |
-          rm -rf ${{ env[format('{0}_pack', matrix.repository)] }}/app/src/main/assets/hybrid
-          mkdir -p ${{ env[format('{0}_pack', matrix.repository)] }}/app/src/main/assets/hybrid
-          ls ${{ matrix.repository }}/dist/build/h5/
-          cp -r ${{ matrix.repository }}/dist/build/h5/* ${{ env[format('{0}_pack', matrix.repository)] }}/app/src/main/assets/hybrid/
- 
+          sed -i 's/1.6.5/1.6.6/g' pnpm-lock.yaml
+          pnpm install --no-frozen-lockfile
+          npm run build:web-app
+          ls dist/build/h5/assets
+          ls app/JBC/app/src/main/assets/hybrid/assets
       - name: Build the APK
-        working-directory: ${{ env[format('{0}_pack', matrix.repository)] }}
+        working-directory: ./app/JBC
         run: |
           chmod +x gradlew
           version=${{ steps.config.outputs.new_version }}
           version_code=${{ steps.config.outputs.new_version_code }}
-          sed -i "s/versionName \"[^\"]*\"/versionName \"$version\"/" app/build.gradle
-          sed -i "s/versionCode [0-9]*/versionCode $version_code/" app/build.gradle
-          ./gradlew assembleTtposRelease  
-
+          ./gradlew assemble "-PCustomCode=${version_code}" "-PVersionName=${version}" "-PPackageTimes=1" 
+          #./autoBuild.sh full
       - uses: 'google-github-actions/auth@v2'
         with:
           credentials_json: '${{ secrets.GOOGLE_STORAGE_CREDENTIALS }}'  
@@ -125,16 +104,14 @@ jobs:
       - id: 'upload-files'
         uses: 'google-github-actions/upload-cloud-storage@v2'
         with:
-          path: ${{ env[format('{0}_pack', matrix.repository)] }}/${{ env.apk_path }}
-          destination: ${{ env[format('{0}_path', matrix.repository)] }} 
+          path: ${{ env.apk_path }}
+          destination: ${{ env.upload_path }}      
           parent: false
           
-            
       - name: Save Build Result
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ env[format('{0}_pack', matrix.repository)] }}
+          name: apk
           path: |
-            ${{ env[format('{0}_pack', matrix.repository)] }}/app/build/outputs/apk/ttpos/release/*.apk
-          
-  
+            app/JBC/app/build/outputs/apk/jbc/release/*.apk
+            app/JBC/app/build/outputs/apk/ttpos/release/*.apk
