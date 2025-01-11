@@ -80,7 +80,7 @@ jobs:
         run: |
           pnpm install fs-extra
           pnpm install --no-frozen-lockfile
-          npm run build:debug-app
+          npm run build:web-app
           
       - name: Build the Webapp
         run: |
