@@ -94,7 +94,7 @@ jobs:
           chmod +x gradlew
           version=${{ steps.config.outputs.new_version }}
           version_code=${{ steps.config.outputs.new_version_code }}
-          ./gradlew assemble "-PDebug=Debug" "-PCustomCode=${version_code}" "-PVersionName=${version}" "-PPackageTimes=1" 
+          ./gradlew assemble "-PCustomCode=${version_code}" "-PVersionName=${version}" "-PPackageTimes=1" 
           #./autoBuild.sh full
       - uses: 'google-github-actions/auth@v2'
         with:
