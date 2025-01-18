@@ -1,6 +1,7 @@
 name: Build TTPOS Cashier Test APK
 
 env:
+  target: develop
   repository: innet8/cash-register-system
   title: TTPOS
   brand: ttpos
@@ -83,7 +84,7 @@ jobs:
             sed -i '/APP_BASE_URL/d' .env
             sed -i '/APP_TARGET/d' .env
             echo "APP_BASE_URL=${{ github.event.inputs.base_url }}" >> .env
-            echo "APP_TARGET=develop" >> .env
+            echo "APP_TARGET=${{ env.target }}" >> .env
           fi
 
       - name: Build the MINI

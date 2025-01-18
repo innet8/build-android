@@ -2,6 +2,7 @@ name: Build TTPOS flat-panel-side Test APK
 
 env:
   # repositories: innet8/flat-panel-side,innet8/KitchenDisplay,innet8/Cashier-System-Helper
+  target: develop
   flat-panel-side_pack: WebViewPack
   KitchenDisplay_pack: KitchenPack
   Cashier-System-Helper_pack: CashierHelperPack
@@ -101,9 +102,9 @@ jobs:
             sed -i '/APP_BASE_URL/d' .env
             sed -i '/APP_TARGET/d' .env
             echo "APP_BASE_URL=${{ github.event.inputs.base_url }}" >> .env
-            echo "APP_TARGET=develop" >> .env
+            echo "APP_TARGET=${{ env.target }}" >> .env
           fi
-          
+
       - name: Build the web
         working-directory: ${{ matrix.repository }}
         run: |
