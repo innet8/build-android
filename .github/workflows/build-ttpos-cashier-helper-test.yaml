@@ -110,7 +110,7 @@ jobs:
         working-directory: ${{ matrix.repository }}
         run: |
           rm -rf dist/build/h5/
-          pnpm install --legacy-peer-deps
+          pnpm install
           pnpm run build:h5
 
       - name: Copy dist to android
