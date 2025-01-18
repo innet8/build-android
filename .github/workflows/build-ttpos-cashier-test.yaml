@@ -6,21 +6,14 @@ env:
   brand: ttpos
   webLogo: ''
   mode: saas
-  saasApiUrl: 'https://d-group.ttpos.com'
+  saasApiUrl: 'https://d-cashier.ttpos.com'
   apk_path: app/JBC/app/build/outputs/apk/ttpos/release/
   upload_path: dc_apk/TTPOS/Demo/Cashier/
   
 on:
-  workflow_dispatch:
-    inputs:
-      version:
-        description: 'Version name (e.g., 1.0.0)'
-        required: true
-        default: '1.0.0'
-      branch: 
-        description: 'branch (e.g., release)'
-        required: true
-        default: 'release'
+  push:
+    tags:
+      - '*'
 
 jobs:
   build:
@@ -74,21 +67,28 @@ jobs:
           EOF
           echo "new_version=$new_version" >> $GITHUB_OUTPUT
           echo "new_version_code=$new_version_code" >> $GITHUB_OUTPUT
-          
+
+          if [ -f ".env.example" ]; then
+            cp .env.example .env
+            sed -i '/APP_BASE_URL/d' .env
+            sed -i '/APP_TARGET/d' .env
+            echo "APP_BASE_URL=${{ github.event.inputs.base_url }}" >> .env
+            echo "APP_TARGET=${{ env.target }}" >> .env
+          fi
+
       - name: Build the MINI
         working-directory: ./app/Mini
         run: |
           pnpm install fs-extra
-          pnpm install --no-frozen-lockfile
-          npm run build:web-app
+          pnpm install
+          pnpm run build:web-app
           
       - name: Build the Webapp
         run: |
-          sed -i 's/1.6.5/1.6.6/g' pnpm-lock.yaml
-          pnpm install --no-frozen-lockfile
-          npm run build:web-app
-          ls dist/build/h5/assets
-          ls app/JBC/app/src/main/assets/hybrid/assets
+          pnpm install
+          pnpm run build:web-app
+          #ls dist/build/h5/assets
+          #ls app/JBC/app/src/main/assets/hybrid/assets
       - name: Build the APK
         working-directory: ./app/JBC
         run: |
