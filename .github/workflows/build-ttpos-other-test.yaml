@@ -16,16 +16,9 @@ env:
   KitchenDisplay_path: dc_apk/TTPOS/JP/Kitchen/
   Cashier-System-Helper_path: dc_apk/TTPOS/JP/Assistant/
 on:
-  workflow_dispatch:
-    inputs:
-      version:
-        description: 'Version name (e.g., 1.0.0)'
-        required: true
-        default: '1.0.0'
-      branch: 
-        description: 'branch (e.g., release)'
-        required: true
-        default: 'release'
+  push:
+    tags:
+      - '*'
 
 jobs:
   build:
@@ -93,13 +86,20 @@ jobs:
           EOF
           echo "new_version=$new_version" >> $GITHUB_OUTPUT
           echo "new_version_code=$new_version_code" >> $GITHUB_OUTPUT
-        
+          if [ -f ".env.example" ]; then
+            cp .env.example .env
+            sed -i '/APP_BASE_URL/d' .env
+            sed -i '/APP_TARGET/d' .env
+            echo "APP_BASE_URL=${{ env.saasApiUrl }}" >> .env
+            echo "APP_TARGET=${{ env.target }}" >> .env
+          fi
+          
       - name: Build the web
         working-directory: ${{ matrix.repository }}
         run: |
           rm -rf dist/build/h5/
-          npm install --legacy-peer-deps
-          npm run build:h5
+          pnpm install
+          pnpm run build:h5
 
       - name: Copy dist to android
         run: |
@@ -107,7 +107,7 @@ jobs:
           mkdir -p ${{ env[format('{0}_pack', matrix.repository)] }}/app/src/main/assets/hybrid
           ls ${{ matrix.repository }}/dist/build/h5/
           cp -r ${{ matrix.repository }}/dist/build/h5/* ${{ env[format('{0}_pack', matrix.repository)] }}/app/src/main/assets/hybrid/
- 
+          
       - name: Build the APK
         working-directory: ${{ env[format('{0}_pack', matrix.repository)] }}
         run: |
