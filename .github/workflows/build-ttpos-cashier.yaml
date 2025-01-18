@@ -1,6 +1,7 @@
 name: Build TTPOS Cashier APK
 
 env:
+  target: production
   repository: innet8/cash-register-system
   title: TTPOS
   brand: ttpos
@@ -11,16 +12,9 @@ env:
   upload_path: dc_apk/TTPOS/Prod/Cashier/
   
 on:
-  workflow_dispatch:
-    inputs:
-      version:
-        description: 'Version name (e.g., 1.0.0)'
-        required: true
-        default: '1.0.0'
-      branch: 
-        description: 'branch (e.g., release)'
-        required: true
-        default: 'release'
+  push:
+    tags:
+      - '*'
 
 jobs:
   build:
@@ -74,7 +68,14 @@ jobs:
           EOF
           echo "new_version=$new_version" >> $GITHUB_OUTPUT
           echo "new_version_code=$new_version_code" >> $GITHUB_OUTPUT
-          
+          if [ -f ".env.example" ]; then
+            cp .env.example .env
+            sed -i '/APP_BASE_URL/d' .env
+            sed -i '/APP_TARGET/d' .env
+            echo "APP_BASE_URL=${{ env.saasApiUrl }}" >> .env
+            echo "APP_TARGET=${{ env.target }}" >> .env
+          fi
+
       - name: Build the MINI
         working-directory: ./app/Mini
         run: |
