@@ -98,8 +98,8 @@ jobs:
         working-directory: ${{ matrix.repository }}
         run: |
           rm -rf dist/build/h5/
-          npm install --legacy-peer-deps
-          npm run build:h5
+          pnpm install --legacy-peer-deps
+          pnpm run build:h5
 
       - name: Copy dist to android
         run: |

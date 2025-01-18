@@ -26,7 +26,10 @@ on:
         description: 'branch (e.g., release)'
         required: true
         default: 'release'
-
+      base_url: 
+        description: 'base_url (e.g., base_url)'
+        required: false
+        default: 'https://jjjshop.keli.vip'
 jobs:
   build:
     runs-on: ubuntu-22.04
@@ -93,13 +96,20 @@ jobs:
           EOF
           echo "new_version=$new_version" >> $GITHUB_OUTPUT
           echo "new_version_code=$new_version_code" >> $GITHUB_OUTPUT
-        
+          if [ -f ".env.example" ]; then
+            cp .env.example .env
+            sed -i '/APP_BASE_URL/d' .env
+            sed -i '/APP_TARGET/d' .env
+            echo "APP_BASE_URL=${{ github.event.inputs.base_url }}" >> .env
+            echo "APP_TARGET=develop" >> .env
+          fi
+          
       - name: Build the web
         working-directory: ${{ matrix.repository }}
         run: |
           rm -rf dist/build/h5/
-          npm install --legacy-peer-deps
-          npm run build:h5
+          pnpm install --legacy-peer-deps
+          pnpm run build:h5
 
       - name: Copy dist to android
         run: |

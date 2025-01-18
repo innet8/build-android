@@ -80,12 +80,12 @@ jobs:
         run: |
           pnpm install fs-extra
           pnpm install
-          npm run build:web-app
+          pnpm run build:web-app
           
       - name: Build the Webapp
         run: |
           pnpm install
-          npm run build:web-app
+          pnpm run build:web-app
           #ls dist/build/h5/assets
           #ls app/JBC/app/src/main/assets/hybrid/assets
       - name: Build the APK

@@ -21,7 +21,10 @@ on:
         description: 'branch (e.g., release)'
         required: true
         default: 'release'
-
+      base_url: 
+        description: 'base_url (e.g., base_url)'
+        required: false
+        default: 'https://jjjshop.keli.vip'
 jobs:
   build:
     runs-on: ubuntu-22.04
@@ -74,18 +77,26 @@ jobs:
           EOF
           echo "new_version=$new_version" >> $GITHUB_OUTPUT
           echo "new_version_code=$new_version_code" >> $GITHUB_OUTPUT
-          
+
+          if [ -f ".env.example" ]; then
+            cp .env.example .env
+            sed -i '/APP_BASE_URL/d' .env
+            sed -i '/APP_TARGET/d' .env
+            echo "APP_BASE_URL=${{ github.event.inputs.base_url }}" >> .env
+            echo "APP_TARGET=develop" >> .env
+          fi
+
       - name: Build the MINI
         working-directory: ./app/Mini
         run: |
           pnpm install fs-extra
           pnpm install
-          npm run build:web-app
+          pnpm run build:web-app
           
       - name: Build the Webapp
         run: |
           pnpm install
-          npm run build:web-app
+          pnpm run build:web-app
           #ls dist/build/h5/assets
           #ls app/JBC/app/src/main/assets/hybrid/assets
       - name: Build the APK
