@@ -17,9 +17,20 @@ env:
   KitchenDisplay_path: dc_apk/TTPOS/Test/Kitchen/
   Cashier-System-Helper_path: dc_apk/TTPOS/Test/Assistant/
 on:
-  push:
-    tags:
-      - '*'
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version name (e.g., 1.0.0)'
+        required: true
+        default: '1.0.0'
+      branch: 
+        description: 'branch (e.g., release)'
+        required: true
+        default: 'release'
+      base_url: 
+        description: 'base_url (e.g., base_url)'
+        required: false
+        default: 'https://jjjshop.keli.vip'
 
 jobs:
   build:
