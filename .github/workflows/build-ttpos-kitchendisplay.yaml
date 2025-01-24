@@ -17,6 +17,9 @@ env:
   KitchenDisplay_path: dc_apk/TTPOS/Prod/Kitchen/
   Cashier-System-Helper_path: dc_apk/TTPOS/Prod/Assistant/
 on:
+  push:
+    tags:
+      - '*'
   workflow_dispatch:
     inputs:
       version:
@@ -46,7 +49,7 @@ jobs:
           path: ${{ matrix.repository }}
           repository: innet8/${{ matrix.repository }}
           token: ${{ secrets.OTHER_REPO_TOKEN }}
-          ref: ${{ github.event.inputs.branch }} 
+          ref: ${{ github.event_name == 'push' && github.ref || github.event.inputs.branch }} 
       - name: Checkout pack code
         uses: actions/checkout@v3
         with:
