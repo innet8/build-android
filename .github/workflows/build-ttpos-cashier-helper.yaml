@@ -8,6 +8,7 @@ env:
   Cashier-System-Helper_pack: CashierHelperPack
   title: TTPOS
   brand: ttpos
+  branch: release
   webLogo: ''
   mode: saas
   saasApiUrl: 'https://assistant.ttpos.com'
@@ -35,7 +36,7 @@ jobs:
           path: ${{ matrix.repository }}
           repository: innet8/${{ matrix.repository }}
           token: ${{ secrets.OTHER_REPO_TOKEN }}
-          ref: ${{ github.event.inputs.branch }} 
+          ref: ${{ env.branch }} 
       - name: Checkout pack code
         uses: actions/checkout@v3
         with:
