@@ -7,9 +7,9 @@ env:
   brand: ttpos
   webLogo: ''
   mode: saas
-  saasApiUrl: 'https://cashier.ttpos.com'
+  saasApiUrl: 'http://172.20.171.88'
   apk_path: app/JBC/app/build/outputs/apk/ttpos/release/
-  upload_path: dc_apk/TTPOS/Prod/Cashier/
+  upload_path: dc_apk/TTPOS/JP/Cashier/
   
 on:
   push:

@@ -10,12 +10,12 @@ env:
   brand: ttpos
   webLogo: ''
   mode: saas
-  saasApiUrl: 'https://cashier.ttpos.com'
+  saasApiUrl: 'http://172.20.171.88'
   apk_path: app/build/outputs/apk/ttpos/release/
-  # upload_path: dc_apk/TTPOS/Test/Cashier/
-  flat-panel-side_path: dc_apk/TTPOS/Test/Menu/
-  KitchenDisplay_path: dc_apk/TTPOS/Test/Kitchen/
-  Cashier-System-Helper_path: dc_apk/TTPOS/Test/Assistant/
+  # upload_path: dc_apk/TTPOS/JP/Cashier/
+  flat-panel-side_path: dc_apk/TTPOS/JP/Menu/
+  KitchenDisplay_path: dc_apk/TTPOS/JP/Kitchen/
+  Cashier-System-Helper_path: dc_apk/TTPOS/JP/Assistant/
 on:
   push:
     tags:
