@@ -33,7 +33,7 @@ on:
       base_url: 
         description: 'base_url (e.g., base_url)'
         required: false
-        default: 'https://assistant.ttpos.com'
+        default: 'http://172.20.171.88'
 jobs:
   build:
     runs-on: ubuntu-22.04
