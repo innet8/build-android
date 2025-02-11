@@ -9,7 +9,7 @@ env:
   brand: ttpos
   webLogo: ''
   mode: saas
-  saasApiUrl: 'http://d-assistant.ttpos.com'
+  saasApiUrl: 'https://d-assistant.ttpos.com'
   apk_path: app/build/outputs/apk/ttpos/release/
   # upload_path: dc_apk/TTPOS/Test/Cashier/
   flat-panel-side_path: dc_apk/TTPOS/Demo/Menu/
@@ -19,7 +19,20 @@ on:
   push:
     tags:
       - '*'
- 
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version name (e.g., 1.0.0)'
+        required: true
+        default: '1.0.0'
+      branch: 
+        description: 'branch (e.g., release)'
+        required: true
+        default: 'release'
+      base_url: 
+        description: 'base_url (e.g., base_url)'
+        required: false
+        default: 'https://d-assistant.ttpos.com'
 jobs:
   build:
     runs-on: ubuntu-22.04
